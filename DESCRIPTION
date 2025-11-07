@@ -1,0 +1,21 @@
+Package: ect
+Title: Package for Effect Consistency Test
+Version: 0.1.0
+Authors@R: 
+    person("Xiaotong", "Sun", , "xsun1229@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Functions to perform SNP pruning, PLINK-based association testing, 
+    and adaptive resampling Effect Consistency Tests (ECT) for genetic data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    data.table,
+    parallel,
+    gtools
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
