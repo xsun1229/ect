@@ -1,12 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ect
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of ect is to …
+An R package for Effect Consistency Test
 
 ## Installation
 
@@ -24,14 +19,31 @@ Then load it
 library(ect)
 ```
 
+## Overview of the Main Functions
+
+1.  `prune_snps()` — Select independent SNPs
+
+Reduces redundancy in GWAS summary statistics by identifying
+approximately independent SNPs using PLINK clumping and LD pruning.
+
+2.  `ECT()` — Effect Consistency Test
+
+Performs an adaptive resampling test to assess whether SNP effect
+directions on an outcome (GWAS trait) are consistent with those on an
+exposure (pathway factor).
+
+3.  `run_snps_assoc()` — Run PLINK-based SNP associations
+
+Automates PLINK linear association testing for multiple SNPs and
+phenotypes (factors) in parallel, with optional MAF annotation. Helps to
+prepare the input for `ECT()`
+
 ## Full tutorial
 
 <https://xsun1229.github.io/ect/articles/getting_started.html>
 
-## Citation
-
-If you use ect in published work, please cite it using:
-
-``` r
-library(ect)
-```
+<!-- ## Citation -->
+<!-- If you use ect in published work, please cite it using: -->
+<!-- ``` r -->
+<!-- citation("ect") -->
+<!-- ``` -->
