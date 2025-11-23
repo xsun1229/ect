@@ -1,0 +1,57 @@
+An R package for Effect Consistency Test
+
+## Installation
+
+You can install the development version of ect from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("xsun1229/ect")
+```
+
+Then load it
+
+``` r
+library(ect)
+```
+
+## Overview of the Main Functions
+
+1.  [`prune_snps()`](reference/prune_snps.md) — Select independent SNPs
+
+Reduces redundancy in GWAS summary statistics by identifying
+approximately independent SNPs using PLINK clumping and LD pruning.
+
+2.  [`ECT()`](reference/ECT.md) — Effect Consistency Test
+
+Performs an adaptive resampling test to assess whether SNP effect
+directions on an outcome (GWAS trait) are consistent with those on an
+exposure (pathway factor).
+
+3.  [`run_snps_assoc()`](reference/run_snps_assoc.md) — Run PLINK-based
+    SNP associations
+
+Automates PLINK linear association testing for multiple SNPs and
+phenotypes (factors) in parallel, with optional MAF annotation. Helps to
+prepare the input for [`ECT()`](reference/ECT.md)
+
+## Full tutorial
+
+<https://xsun1229.github.io/ect/articles/getting_started.html>
+
+# Package index
+
+## All functions
+
+- [`ECT()`](ECT.md) : Effect Consistency Test (ECT)
+- [`prune_snps()`](prune_snps.md) : Prune SNPs based on clumping and LD
+  thresholds using PLINK
+- [`run_snps_assoc()`](run_snps_assoc.md) : Run PLINK-based SNP
+  association analyses in parallel
+
+# Articles
+
+### All vignettes
+
+- [Getting Started](getting_started.md) :
