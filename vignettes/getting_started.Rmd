@@ -126,6 +126,19 @@ print(pruned_snps)
 
 
 
+```{r eval=T, echo=F}
+
+pruned_snps <- readRDS(
+  system.file("extdata", "pruned_snps.RDS",
+              package = "ect")
+)
+
+print(pruned_snps)
+
+```
+
+
+
 ## Effect Consistency Test
 
 The `ECT()` function performs an **adaptive resampling-based Effect Consistency Test (ECT)** to evaluate whether SNP effect sizes on an outcome (e.g., a GWAS trait) are **consistent with** their effects on an exposure variable (e.g., a pathway-derived expression factor).
