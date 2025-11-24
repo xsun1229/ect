@@ -1,4 +1,4 @@
-# Getting Started
+# Tutorial for ect
 
 We provide two main functions in this package:
 

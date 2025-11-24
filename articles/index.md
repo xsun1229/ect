@@ -2,4 +2,4 @@
 
 ### All vignettes
 
-- [Getting Started](getting_started.md) :
+- [Tutorial for ect](getting_started.md):
