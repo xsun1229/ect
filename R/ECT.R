@@ -54,8 +54,7 @@
 #' )
 #' }
 #'
-#' @importFrom parallel mclapply detectCores
-#' @importFrom gtools combinations
+
 #' @export
 ECT <- function(assoc_pair,
                 factor_name,
