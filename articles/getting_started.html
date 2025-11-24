@@ -64,8 +64,6 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/xsun1229/ect" class="external-link">ect</a></span><span class="op">)</span></span></code></pre></div>
 <p>We provide two main functions and one auxiliary function in this
 package:</p>
 <p><strong>Main functions</strong></p>
@@ -94,7 +92,7 @@ prepare the input for <code><a href="../reference/ECT.html">ECT()</a></code></p>
 <h2 id="install-ect">Install ECT<a class="anchor" aria-label="anchor" href="#install-ect"></a>
 </h2>
 <p>Use “devtools” to install the latest version of ect from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"xsun1229/ect"</span><span class="op">)</span></span></code></pre></div>
 <p>Currently, ect has only been tested on Linux systems.</p>
@@ -166,7 +164,7 @@ aggregation.</p>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/prune_snps.html">prune_snps</a></span><span class="op">(</span></span>
 <span>  <span class="va">file_sumstats</span>,</span>
 <span>  <span class="va">plink_path</span>,</span>
@@ -217,6 +215,22 @@ subdirectories are deleted after the function completes.</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file_sumstats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_sumstats.txt"</span>, package <span class="op">=</span> <span class="st">"ect"</span><span class="op">)</span></span>
+<span><span class="va">bfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example"</span>, package <span class="op">=</span> <span class="st">"ect"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/prune_snps.html">prune_snps</a></span><span class="op">(</span></span>
+<span>  file_sumstats <span class="op">=</span> <span class="va">file_sumstats</span>,</span>
+<span>  plink_path <span class="op">=</span> <span class="va">plink_path</span>,</span>
+<span>  bfile <span class="op">=</span> <span class="va">bfile</span>,</span>
+<span>  out.dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  out.pref <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>  clean_up <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -368,6 +382,106 @@ resampling stage.</td>
 </ul>
 <p>If the number of supporting SNPs &lt; num_snp_cutoff, a placeholder
 row is returned.</p>
+</div>
+<div class="section level3">
+<h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a>
+</h3>
+<p>We provide an example using a small demonstration dataset included in
+the package.</p>
+<p>This dataset contains SNP-level association summary statistics that
+have already been <strong>harmonized with the GWAS</strong> (i.e.,
+aligned alleles, matched SNPs, and retained relevant columns).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_assoc_output.RDS"</span>,</span>
+<span>              package <span class="op">=</span> <span class="st">"ect"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          SNP effect_allele.exposure other_allele.exposure effect_allele.outcome</span></span>
+<span><span class="co">#&gt; 1  rs1003342                      A                     G                     A</span></span>
+<span><span class="co">#&gt; 2 rs10142466                      G                     A                     G</span></span>
+<span><span class="co">#&gt; 3 rs10748781                      C                     A                     C</span></span>
+<span><span class="co">#&gt; 4 rs10758669                      C                     A                     C</span></span>
+<span><span class="co">#&gt; 5 rs10761659                      A                     G                     A</span></span>
+<span><span class="co">#&gt; 6 rs10800309                      A                     G                     A</span></span>
+<span><span class="co">#&gt;   other_allele.outcome beta.exposure beta.outcome eaf.exposure eaf.outcome</span></span>
+<span><span class="co">#&gt; 1                    G       0.12270    0.0801818       0.4633      0.4541</span></span>
+<span><span class="co">#&gt; 2                    A       0.08420   -0.0580054       0.4773      0.5065</span></span>
+<span><span class="co">#&gt; 3                    A      -0.07677    0.1691790       0.4301      0.4267</span></span>
+<span><span class="co">#&gt; 4                    A       0.06959    0.1487620       0.3339      0.3496</span></span>
+<span><span class="co">#&gt; 5                    G      -0.04096   -0.1538110       0.4895      0.4601</span></span>
+<span><span class="co">#&gt; 6                    G       0.12650    0.1321110       0.3444      0.3422</span></span>
+<span><span class="co">#&gt;   remove palindromic ambiguous id.outcome chr.outcome se.outcome pval.outcome</span></span>
+<span><span class="co">#&gt; 1  FALSE       FALSE     FALSE     bqg1BA          22  0.0101765 3.296856e-15</span></span>
+<span><span class="co">#&gt; 2  FALSE       FALSE     FALSE     bqg1BA          14  0.0101460 1.083652e-08</span></span>
+<span><span class="co">#&gt; 3  FALSE       FALSE     FALSE     bqg1BA          10  0.0100678 2.284021e-63</span></span>
+<span><span class="co">#&gt; 4  FALSE       FALSE     FALSE     bqg1BA           9  0.0102138 4.698941e-48</span></span>
+<span><span class="co">#&gt; 5  FALSE       FALSE     FALSE     bqg1BA          10  0.0100347 4.970499e-53</span></span>
+<span><span class="co">#&gt; 6  FALSE       FALSE     FALSE     bqg1BA           1  0.0104050 6.154602e-37</span></span>
+<span><span class="co">#&gt;   outcome mr_keep.outcome pval_origin.outcome data_source.outcome chr.exposure</span></span>
+<span><span class="co">#&gt; 1 outcome            TRUE            reported            textfile           22</span></span>
+<span><span class="co">#&gt; 2 outcome            TRUE            reported            textfile           14</span></span>
+<span><span class="co">#&gt; 3 outcome            TRUE            reported            textfile           10</span></span>
+<span><span class="co">#&gt; 4 outcome            TRUE            reported            textfile            9</span></span>
+<span><span class="co">#&gt; 5 outcome            TRUE            reported            textfile           10</span></span>
+<span><span class="co">#&gt; 6 outcome            TRUE            reported            textfile            1</span></span>
+<span><span class="co">#&gt;   pos.exposure z.exposure pval.exposure samplesize.exposure se.exposure</span></span>
+<span><span class="co">#&gt; 1     30570022     1.9280       0.05491                 286  0.06364108</span></span>
+<span><span class="co">#&gt; 2     69271784     0.9843       0.32590                 286  0.08554303</span></span>
+<span><span class="co">#&gt; 3    101283330    -1.1380       0.25610                 286  0.06746046</span></span>
+<span><span class="co">#&gt; 4      4981602     0.9969       0.31970                 286  0.06980640</span></span>
+<span><span class="co">#&gt; 5     64445564    -0.6269       0.53130                 286  0.06533737</span></span>
+<span><span class="co">#&gt; 6    161472158     1.8970       0.05890                 286  0.06668424</span></span>
+<span><span class="co">#&gt;   exposure mr_keep.exposure pval_origin.exposure id.exposure action SNP_index</span></span>
+<span><span class="co">#&gt; 1 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt; 2 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt; 3 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt; 4 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt; 5 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt; 6 exposure             TRUE             reported      5ewqAI      2         1</span></span>
+<span><span class="co">#&gt;   mr_keep samplesize.outcome FDR.exposure units.outcome units.exposure</span></span>
+<span><span class="co">#&gt; 1    TRUE              34652    0.4240272            NA             NA</span></span>
+<span><span class="co">#&gt; 2    TRUE              34652    0.6899455            NA             NA</span></span>
+<span><span class="co">#&gt; 3    TRUE              34652    0.6899455            NA             NA</span></span>
+<span><span class="co">#&gt; 4    TRUE              34652    0.6899455            NA             NA</span></span>
+<span><span class="co">#&gt; 5    TRUE              34652    0.8101283            NA             NA</span></span>
+<span><span class="co">#&gt; 6    TRUE              34652    0.4309000            NA             NA</span></span>
+<span><span class="co">#&gt;   rsq.exposure effective_n.exposure  rsq.outcome effective_n.outcome</span></span>
+<span><span class="co">#&gt; 1  0.012919576                  286 0.0017884388               34652</span></span>
+<span><span class="co">#&gt; 2  0.003399833                  286 0.0009423982               34652</span></span>
+<span><span class="co">#&gt; 3  0.004539315                  286 0.0080834295               34652</span></span>
+<span><span class="co">#&gt; 4  0.003487127                  286 0.0060849268               34652</span></span>
+<span><span class="co">#&gt; 5  0.001381903                  286 0.0067348506               34652</span></span>
+<span><span class="co">#&gt; 6  0.012512609                  286 0.0046309987               34652</span></span>
+<span><span class="co">#&gt;   steiger_dir steiger_pval</span></span>
+<span><span class="co">#&gt; 1        TRUE    0.2287165</span></span>
+<span><span class="co">#&gt; 2        TRUE    0.6429863</span></span>
+<span><span class="co">#&gt; 3       FALSE    0.7040206</span></span>
+<span><span class="co">#&gt; 4       FALSE    0.7496733</span></span>
+<span><span class="co">#&gt; 5       FALSE    0.4502789</span></span>
+<span><span class="co">#&gt; 6        TRUE    0.4592454</span></span></code></pre></div>
+<p>To keep the example computationally light, we reduce the number of
+resampling iterations compared to the default settings.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">ECT_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ECT.html">ECT</a></span><span class="op">(</span></span>
+<span>  <span class="va">dat</span>,</span>
+<span>  factor_name <span class="op">=</span> <span class="st">"example"</span>,</span>
+<span>  num_snp_cutoff <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  snp_fdr_cutoff <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  seeds <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  resample_stages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">10000</span><span class="op">)</span>,</span>
+<span>  p_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.001</span><span class="op">)</span>,</span>
+<span>  col_beta_exposure <span class="op">=</span> <span class="st">"beta.exposure"</span>,</span>
+<span>  col_beta_outcome <span class="op">=</span> <span class="st">"beta.outcome"</span>,</span>
+<span>  col_pval_exposure <span class="op">=</span> <span class="st">"pval.exposure"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ECT_res</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   factor_name        p_std     r_std    p_ECT num_supp_SNP</span></span>
+<span><span class="co">#&gt; 1     example 0.0002353945 0.7933485 0.009901           10</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -1,9 +1,5 @@
 # Getting Started
 
-``` r
-library(ect)
-```
-
 We provide two main functions and one auxiliary function in this
 package:
 
@@ -110,6 +106,22 @@ prune_snps(
 | **`out.pref`**      | Prefix used for naming PLINK outputs and final result files.                                               |
 | **`clean_up`**      | If `TRUE`, temporary PLINK files and intermediate subdirectories are deleted after the function completes. |
 
+### Example
+
+``` r
+file_sumstats <- system.file("extdata", "example_sumstats.txt", package = "ect")
+bfile <- system.file("extdata", "example", package = "ect")
+
+prune_snps(
+  file_sumstats = file_sumstats,
+  plink_path = plink_path,
+  bfile = bfile,
+  out.dir = tempdir(),
+  out.pref = "example",
+  clean_up = TRUE
+)
+```
+
 ## Effect Consistency Test
 
 The [`ECT()`](../reference/ECT.md) function performs an **adaptive
@@ -204,3 +216,108 @@ The function returns a data frame containing:
 
 If the number of supporting SNPs \< num_snp_cutoff, a placeholder row is
 returned.
+
+### Example
+
+We provide an example using a small demonstration dataset included in
+the package.
+
+This dataset contains SNP-level association summary statistics that have
+already been **harmonized with the GWAS** (i.e., aligned alleles,
+matched SNPs, and retained relevant columns).
+
+``` r
+
+dat <- readRDS(
+  system.file("extdata", "example_assoc_output.RDS",
+              package = "ect")
+)
+
+print(head(dat))
+#>          SNP effect_allele.exposure other_allele.exposure effect_allele.outcome
+#> 1  rs1003342                      A                     G                     A
+#> 2 rs10142466                      G                     A                     G
+#> 3 rs10748781                      C                     A                     C
+#> 4 rs10758669                      C                     A                     C
+#> 5 rs10761659                      A                     G                     A
+#> 6 rs10800309                      A                     G                     A
+#>   other_allele.outcome beta.exposure beta.outcome eaf.exposure eaf.outcome
+#> 1                    G       0.12270    0.0801818       0.4633      0.4541
+#> 2                    A       0.08420   -0.0580054       0.4773      0.5065
+#> 3                    A      -0.07677    0.1691790       0.4301      0.4267
+#> 4                    A       0.06959    0.1487620       0.3339      0.3496
+#> 5                    G      -0.04096   -0.1538110       0.4895      0.4601
+#> 6                    G       0.12650    0.1321110       0.3444      0.3422
+#>   remove palindromic ambiguous id.outcome chr.outcome se.outcome pval.outcome
+#> 1  FALSE       FALSE     FALSE     bqg1BA          22  0.0101765 3.296856e-15
+#> 2  FALSE       FALSE     FALSE     bqg1BA          14  0.0101460 1.083652e-08
+#> 3  FALSE       FALSE     FALSE     bqg1BA          10  0.0100678 2.284021e-63
+#> 4  FALSE       FALSE     FALSE     bqg1BA           9  0.0102138 4.698941e-48
+#> 5  FALSE       FALSE     FALSE     bqg1BA          10  0.0100347 4.970499e-53
+#> 6  FALSE       FALSE     FALSE     bqg1BA           1  0.0104050 6.154602e-37
+#>   outcome mr_keep.outcome pval_origin.outcome data_source.outcome chr.exposure
+#> 1 outcome            TRUE            reported            textfile           22
+#> 2 outcome            TRUE            reported            textfile           14
+#> 3 outcome            TRUE            reported            textfile           10
+#> 4 outcome            TRUE            reported            textfile            9
+#> 5 outcome            TRUE            reported            textfile           10
+#> 6 outcome            TRUE            reported            textfile            1
+#>   pos.exposure z.exposure pval.exposure samplesize.exposure se.exposure
+#> 1     30570022     1.9280       0.05491                 286  0.06364108
+#> 2     69271784     0.9843       0.32590                 286  0.08554303
+#> 3    101283330    -1.1380       0.25610                 286  0.06746046
+#> 4      4981602     0.9969       0.31970                 286  0.06980640
+#> 5     64445564    -0.6269       0.53130                 286  0.06533737
+#> 6    161472158     1.8970       0.05890                 286  0.06668424
+#>   exposure mr_keep.exposure pval_origin.exposure id.exposure action SNP_index
+#> 1 exposure             TRUE             reported      5ewqAI      2         1
+#> 2 exposure             TRUE             reported      5ewqAI      2         1
+#> 3 exposure             TRUE             reported      5ewqAI      2         1
+#> 4 exposure             TRUE             reported      5ewqAI      2         1
+#> 5 exposure             TRUE             reported      5ewqAI      2         1
+#> 6 exposure             TRUE             reported      5ewqAI      2         1
+#>   mr_keep samplesize.outcome FDR.exposure units.outcome units.exposure
+#> 1    TRUE              34652    0.4240272            NA             NA
+#> 2    TRUE              34652    0.6899455            NA             NA
+#> 3    TRUE              34652    0.6899455            NA             NA
+#> 4    TRUE              34652    0.6899455            NA             NA
+#> 5    TRUE              34652    0.8101283            NA             NA
+#> 6    TRUE              34652    0.4309000            NA             NA
+#>   rsq.exposure effective_n.exposure  rsq.outcome effective_n.outcome
+#> 1  0.012919576                  286 0.0017884388               34652
+#> 2  0.003399833                  286 0.0009423982               34652
+#> 3  0.004539315                  286 0.0080834295               34652
+#> 4  0.003487127                  286 0.0060849268               34652
+#> 5  0.001381903                  286 0.0067348506               34652
+#> 6  0.012512609                  286 0.0046309987               34652
+#>   steiger_dir steiger_pval
+#> 1        TRUE    0.2287165
+#> 2        TRUE    0.6429863
+#> 3       FALSE    0.7040206
+#> 4       FALSE    0.7496733
+#> 5       FALSE    0.4502789
+#> 6        TRUE    0.4592454
+```
+
+To keep the example computationally light, we reduce the number of
+resampling iterations compared to the default settings.
+
+``` r
+
+ECT_res <- ECT(
+  dat,
+  factor_name = "example",
+  num_snp_cutoff = 3,
+  snp_fdr_cutoff = 0.2,
+  seeds = 1000,
+  resample_stages = c(10, 100, 10000),
+  p_thresholds = c(0.1, 0.001),
+  col_beta_exposure = "beta.exposure",
+  col_beta_outcome = "beta.outcome",
+  col_pval_exposure = "pval.exposure"
+)
+
+print(ECT_res)
+#>   factor_name        p_std     r_std    p_ECT num_supp_SNP
+#> 1     example 0.0002353945 0.7933485 0.009901           10
+```
