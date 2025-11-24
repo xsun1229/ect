@@ -34,7 +34,7 @@ library(ect)
 
 1. `prune_snps()` — Select independent SNPs
 
-Reduces redundancy in GWAS summary statistics by identifying approximately independent SNPs using PLINK clumping and LD pruning.
+Selects independent SNPs using PLINK clumping and LD pruning.
 
 2. `ECT()` — Effect Consistency Test
 
