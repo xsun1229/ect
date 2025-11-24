@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, eval=T}
 library(ect)
 ```
 
@@ -89,14 +89,6 @@ Clumping produces an initial set of **approximately independent lead variants**.
 After completing these steps, the function returns a set of **independent, genome-wide significant variants**, ready for downstream analyses such as association testing or ACAT aggregation.
 
 
-
-
-
-
-
-
-
-
 ### Usage 
 
 ```{r eval=F, echo=T}
@@ -119,6 +111,25 @@ prune_snps(
 | **`out.dir`**       | Directory where intermediate and final result files are stored. A subdirectory is created automatically.   |
 | **`out.pref`**      | Prefix used for naming PLINK outputs and final result files.                                               |
 | **`clean_up`**      | If `TRUE`, temporary PLINK files and intermediate subdirectories are deleted after the function completes. |
+
+
+### Example 
+
+```{r eval=FALSE}
+file_sumstats <- system.file("extdata", "example_sumstats.txt", package = "ect")
+bfile <- system.file("extdata", "example", package = "ect")
+
+prune_snps(
+  file_sumstats = file_sumstats,
+  plink_path = plink_path,
+  bfile = bfile,
+  out.dir = tempdir(),
+  out.pref = "example",
+  clean_up = TRUE
+)
+
+
+```
 
 
 
