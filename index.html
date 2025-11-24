@@ -64,23 +64,19 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/xsun1229/ect" class="external-link">ect</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="overview-of-the-main-functions">Overview of the Main Functions<a class="anchor" aria-label="anchor" href="#overview-of-the-main-functions"></a>
+<h2 id="overview-of-the-functions">Overview of the Functions<a class="anchor" aria-label="anchor" href="#overview-of-the-functions"></a>
 </h2>
+<p>We provide two main functions in this package:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code><a href="reference/prune_snps.html">prune_snps()</a></code> — Select independent SNPs</li>
 </ol>
-<p>Reduces redundancy in GWAS summary statistics by identifying approximately independent SNPs using PLINK clumping and LD pruning.</p>
+<p>Selects independent SNPs using PLINK clumping and LD pruning.</p>
 <ol start="2" style="list-style-type: decimal">
 <li>
 <code><a href="reference/ECT.html">ECT()</a></code> — Effect Consistency Test</li>
 </ol>
 <p>Performs an adaptive resampling test to assess whether SNP effect directions on an outcome (GWAS trait) are consistent with those on an exposure (pathway factor).</p>
-<ol start="3" style="list-style-type: decimal">
-<li>
-<code><a href="reference/run_snps_assoc.html">run_snps_assoc()</a></code> — Run PLINK-based SNP associations</li>
-</ol>
-<p>Automates PLINK linear association testing for multiple SNPs and phenotypes (factors) in parallel, with optional MAF annotation. Helps to prepare the input for <code><a href="reference/ECT.html">ECT()</a></code></p>
 </div>
 <div class="section level2">
 <h2 id="full-tutorial">Full tutorial<a class="anchor" aria-label="anchor" href="#full-tutorial"></a>

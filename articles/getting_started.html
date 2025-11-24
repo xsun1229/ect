@@ -65,14 +65,313 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/xsun1229/ect" class="external-link">ect</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/xsun1229/ect" class="external-link">ect</a></span><span class="op">)</span></span></code></pre></div>
+<p>We provide two main functions and one auxiliary function in this
+package:</p>
+<p><strong>Main functions</strong></p>
+<ol style="list-style-type: decimal">
+<li>
+<code><a href="../reference/prune_snps.html">prune_snps()</a></code> — Select independent SNPs</li>
+</ol>
+<p>Selects independent SNPs using PLINK clumping and LD pruning.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>
+<code><a href="../reference/ECT.html">ECT()</a></code> — Effect Consistency Test</li>
+</ol>
+<p>Performs an adaptive resampling test to assess whether SNP effect
+directions on an outcome (GWAS trait) are consistent with those on an
+exposure (pathway factor).</p>
+<p><strong>Auxiliary function</strong></p>
+<ol style="list-style-type: decimal">
+<li>
+<code><a href="../reference/run_snps_assoc.html">run_snps_assoc()</a></code> — Run PLINK-based SNP
+associations</li>
+</ol>
+<p>Automates PLINK linear association testing for multiple SNPs and
+phenotypes (factors) in parallel, with optional MAF annotation. Helps to
+prepare the input for <code><a href="../reference/ECT.html">ECT()</a></code></p>
 <div class="section level2">
-<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h2 id="install-ect">Install ECT<a class="anchor" aria-label="anchor" href="#install-ect"></a>
 </h2>
+<p>Use “devtools” to install the latest version of ect from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"xsun1229/ect"</span><span class="op">)</span></span></code></pre></div>
+<p>Currently, ect has only been tested on Linux systems.</p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="select-independent-snps">Select independent SNPs<a class="anchor" aria-label="anchor" href="#select-independent-snps"></a>
+</h2>
+<p>The <code><a href="../reference/prune_snps.html">prune_snps()</a></code> function performs two-stage SNP pruning
+to identify a set of approximately independent lead variants from a GWAS
+summary statistics file. It integrates PLINK-based clumping,
+distance-based filtering, and LD-based pruning using a user-specified
+PLINK genotype reference panel.</p>
+<p>This function is designed for downstream analyses that require
+independence among variants, such as variant–factor association
+tests.</p>
+<div class="section level3">
+<h3 id="what-the-function-does">What the function does<a class="anchor" aria-label="anchor" href="#what-the-function-does"></a>
+</h3>
+<p>The pruning proceeds in <strong>three sequential steps</strong>:</p>
+<ol style="list-style-type: decimal">
+<li>PLINK clumping (primary selection of lead SNPs)</li>
+</ol>
+<p>This step uses the GWAS summary statistics together with a PLINK
+genotype reference (<code>bfile</code>) to perform LD clumping.<br>
+The following PLINK thresholds are used by default:</p>
+<ul>
+<li>
+<code>--clump-p1 5e-8</code><br>
+</li>
+<li>
+<code>--clump-p2 1e-3</code><br>
+</li>
+<li>
+<code>--clump-r2 0.1</code><br>
+</li>
+<li><code>--clump-kb 1000</code></li>
+</ul>
+<p>Clumping produces an initial set of <strong>approximately independent
+lead variants</strong>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Distance-based pruning</li>
+</ol>
+<ul>
+<li>For SNPs retained after clumping, any SNP located within <strong>±1
+Mb</strong> of a more significant SNP is removed.<br>
+</li>
+<li>This step enforces <strong>spatial independence</strong>, giving
+priority to SNPs with smaller p-values.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>LD-based pruning</li>
+</ol>
+<ul>
+<li>Pairwise LD (<code>r²</code>) is computed using PLINK for the
+remaining SNPs.<br>
+</li>
+<li>SNPs with <strong>r² &gt; 0.1</strong> relative to previously
+retained variants are removed.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="final-output">Final output<a class="anchor" aria-label="anchor" href="#final-output"></a>
+</h3>
+<p>After completing these steps, the function returns a set of
+<strong>independent, genome-wide significant variants</strong>, ready
+for downstream analyses such as association testing or ACAT
+aggregation.</p>
+</div>
+<div class="section level3">
+<h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/prune_snps.html">prune_snps</a></span><span class="op">(</span></span>
+<span>  <span class="va">file_sumstats</span>,</span>
+<span>  <span class="va">plink_path</span>,</span>
+<span>  <span class="va">bfile</span>,</span>
+<span>  <span class="va">out.dir</span>,</span>
+<span>  <span class="va">out.pref</span>,</span>
+<span>  clean_up <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="84%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong><code>file_sumstats</code></strong></td>
+<td>Path to the GWAS summary statistics file. Must contain columns
+<code>SNP</code>, <code>CHR</code>, <code>BP</code>, and
+<code>P</code>.</td>
+</tr>
+<tr class="even">
+<td><strong><code>plink_path</code></strong></td>
+<td>Path to the PLINK executable (e.g.,
+<code>/usr/bin/plink</code>).</td>
+</tr>
+<tr class="odd">
+<td><strong><code>bfile</code></strong></td>
+<td>PLINK binary file prefix (<code>.bed/.bim/.fam</code>) used as the
+LD reference panel.</td>
+</tr>
+<tr class="even">
+<td><strong><code>out.dir</code></strong></td>
+<td>Directory where intermediate and final result files are stored. A
+subdirectory is created automatically.</td>
+</tr>
+<tr class="odd">
+<td><strong><code>out.pref</code></strong></td>
+<td>Prefix used for naming PLINK outputs and final result files.</td>
+</tr>
+<tr class="even">
+<td><strong><code>clean_up</code></strong></td>
+<td>If <code>TRUE</code>, temporary PLINK files and intermediate
+subdirectories are deleted after the function completes.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section level2">
+<h2 id="effect-consistency-test">Effect Consistency Test<a class="anchor" aria-label="anchor" href="#effect-consistency-test"></a>
+</h2>
+<p>The <code><a href="../reference/ECT.html">ECT()</a></code> function performs an <strong>adaptive
+resampling-based Effect Consistency Test (ECT)</strong> to evaluate
+whether SNP effect sizes on an outcome (e.g., a GWAS trait) are
+<strong>consistent with</strong> their effects on an exposure variable
+(e.g., a pathway-derived expression factor).</p>
+<p>The method compares the <strong>observed R²</strong> from a
+no-intercept regression of outcome effects on exposure effects against a
+<strong>null distribution</strong> generated by permuting the outcome
+effect sizes.</p>
+<div class="section level3">
+<h3 id="what-the-function-does-1">What the function does<a class="anchor" aria-label="anchor" href="#what-the-function-does-1"></a>
+</h3>
+<p>The ECT proceeds in the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Select supporting SNPs</li>
+</ol>
+<ul>
+<li>Supporting SNPs are defined as those with exposure-side p-values
+below the <strong>FDR threshold</strong> (<code>snp_fdr_cutoff</code>,
+default 0.2).<br>
+</li>
+<li>The test is only performed if the number of supporting SNPs ≥
+<code>num_snp_cutoff</code> (default 3).</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Fit the observed regression</li>
+</ol>
+<p>A no-intercept model is fitted:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mtext mathvariant="normal">outcome</mtext></msub><mo>=</mo><mi>γ</mi><mo>⋅</mo><msub><mi>β</mi><mtext mathvariant="normal">exposure</mtext></msub><mo>+</mo><mi>ε</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\beta_{\text{outcome}} = \gamma \cdot \beta_{\text{exposure}} + \varepsilon,
+</annotation></semantics></math></p>
+<p>and the observed <strong>R²</strong> and regression
+<strong>p-value</strong> are calculated.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Adaptive resampling</li>
+</ol>
+<p>To assess whether the observed R² deviates from the null, outcome
+effect sizes are permuted:</p>
+<ul>
+<li>Resampling occurs in <strong>stages</strong>, defined by
+<code>resample_stages</code> (e.g., 1,000 → 10,000 → 1,000,000).<br>
+</li>
+<li>At each stage, the empirical p-value is updated.<br>
+</li>
+<li>Resampling stops early if the empirical p-value exceeds the
+corresponding threshold in <code>p_thresholds</code>.<br>
+</li>
+<li>Otherwise, the next resampling stage is triggered.</li>
+</ul>
+<hr>
+<ol start="4" style="list-style-type: decimal">
+<li>Final output</li>
+</ol>
+<p>The function returns an empirical p-value (<code>p_ECT</code>), the
+observed R² (<code>r_std</code>), the standard regression p-value
+(<code>p_std</code>), and the number of supporting SNPs used.</p>
+<p>If there are insufficient supporting SNPs, the function returns a
+placeholder row indicating that the test was not performed.</p>
+</div>
+<div class="section level3">
+<h3 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ECT.html">ECT</a></span><span class="op">(</span></span>
+<span>  <span class="va">assoc_pair</span>,</span>
+<span>  <span class="va">factor_name</span>,</span>
+<span>  num_snp_cutoff <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  snp_fdr_cutoff <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  seeds <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  resample_stages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10000</span>, <span class="fl">1e6</span><span class="op">)</span>,</span>
+<span>  p_thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.001</span><span class="op">)</span>,</span>
+<span>  col_beta_exposure <span class="op">=</span> <span class="st">"beta.exposure"</span>,</span>
+<span>  col_beta_outcome <span class="op">=</span> <span class="st">"beta.outcome"</span>,</span>
+<span>  col_pval_exposure <span class="op">=</span> <span class="st">"pval.exposure"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<colgroup>
+<col width="11%">
+<col width="88%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>assoc_pair</strong></td>
+<td>Data frame containing association summary statistics for a factor,
+with columns specified by <code>col_beta_exposure</code>,
+<code>col_beta_outcome</code>, and <code>col_pval_exposure</code>.</td>
+</tr>
+<tr class="even">
+<td><strong>factor_name</strong></td>
+<td>Name of the factor or pathway being tested.</td>
+</tr>
+<tr class="odd">
+<td><strong>num_snp_cutoff</strong></td>
+<td>Minimum number of supporting SNPs required to perform the test
+(default: 3).</td>
+</tr>
+<tr class="even">
+<td><strong>snp_fdr_cutoff</strong></td>
+<td>FDR cutoff for selecting supporting SNPs (default: 0.2).</td>
+</tr>
+<tr class="odd">
+<td><strong>seeds</strong></td>
+<td>Base seed for generating reproducible permutations (default:
+1000).</td>
+</tr>
+<tr class="even">
+<td><strong>resample_stages</strong></td>
+<td>Vector indicating resampling sizes for each adaptive stage (default:
+1e3, 1e4, 1e6).</td>
+</tr>
+<tr class="odd">
+<td><strong>p_thresholds</strong></td>
+<td>P-value thresholds used to decide whether to continue to the next
+resampling stage.</td>
+</tr>
+<tr class="even">
+<td><strong>col_beta_exposure</strong></td>
+<td>Column name for exposure effect sizes (default:
+<code>"beta.exposure"</code>).</td>
+</tr>
+<tr class="odd">
+<td><strong>col_beta_outcome</strong></td>
+<td>Column name for outcome effect sizes (default:
+<code>"beta.outcome"</code>).</td>
+</tr>
+<tr class="even">
+<td><strong>col_pval_exposure</strong></td>
+<td>Column name for exposure p-values (default:
+<code>"pval.exposure"</code>).</td>
+</tr>
+</tbody>
+</table>
+<p>The function returns a data frame containing:</p>
+<ul>
+<li>factor_name — the tested factor/pathway</li>
+<li>p_std — p-value from the observed regression</li>
+<li>r_std — R² from the observed regression</li>
+<li>p_ECT — empirical p-value from adaptive resampling</li>
+<li>num_supp_SNP — number of supporting SNPs used in the test</li>
+</ul>
+<p>If the number of supporting SNPs &lt; num_snp_cutoff, a placeholder
+row is returned.</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

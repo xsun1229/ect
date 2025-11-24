@@ -16,25 +16,19 @@ Then load it
 library(ect)
 ```
 
-## Overview of the Main Functions
+## Overview of the Functions
+
+We provide two main functions in this package:
 
 1.  [`prune_snps()`](reference/prune_snps.md) — Select independent SNPs
 
-Reduces redundancy in GWAS summary statistics by identifying
-approximately independent SNPs using PLINK clumping and LD pruning.
+Selects independent SNPs using PLINK clumping and LD pruning.
 
 2.  [`ECT()`](reference/ECT.md) — Effect Consistency Test
 
 Performs an adaptive resampling test to assess whether SNP effect
 directions on an outcome (GWAS trait) are consistent with those on an
 exposure (pathway factor).
-
-3.  [`run_snps_assoc()`](reference/run_snps_assoc.md) — Run PLINK-based
-    SNP associations
-
-Automates PLINK linear association testing for multiple SNPs and
-phenotypes (factors) in parallel, with optional MAF annotation. Helps to
-prepare the input for [`ECT()`](reference/ECT.md)
 
 ## Full tutorial
 
