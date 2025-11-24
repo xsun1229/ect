@@ -110,9 +110,9 @@ prune_snps(
 
 ``` r
 file_sumstats <- system.file("extdata", "example_sumstats.txt", package = "ect")
-bfile <- system.file("extdata", "example", package = "ect")
+bfile <- sub("\\.bed$", "", system.file("extdata/example.bed", package = "ect"))
 
-prune_snps(
+pruned_snps <- prune_snps(
   file_sumstats = file_sumstats,
   plink_path = plink_path,
   bfile = bfile,
@@ -120,6 +120,8 @@ prune_snps(
   out.pref = "example",
   clean_up = TRUE
 )
+
+print(pruned_snps)
 ```
 
 ## Effect Consistency Test
