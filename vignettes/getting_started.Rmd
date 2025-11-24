@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r}
 library(ect)
 ```
 
@@ -205,6 +205,49 @@ The function returns a data frame containing:
   - num_supp_SNP — number of supporting SNPs used in the test
 
 If the number of supporting SNPs < num_snp_cutoff, a placeholder row is returned.
+
+### Example
+
+We provide an example using a small demonstration dataset included in the package.  
+
+This dataset contains SNP-level association summary statistics that have already been **harmonized with the GWAS** (i.e., aligned alleles, matched SNPs, and retained relevant columns).
+
+
+```{r eval=T, echo=T}
+
+dat <- readRDS(
+  system.file("extdata", "example_assoc_output.RDS",
+              package = "ect")
+)
+
+print(head(dat))
+
+```
+
+To keep the example computationally light, we reduce the number of resampling iterations compared to the default settings.
+
+
+```{r eval=T, echo=T}
+
+ECT_res <- ECT(
+  dat,
+  factor_name = "example",
+  num_snp_cutoff = 3,
+  snp_fdr_cutoff = 0.2,
+  seeds = 1000,
+  resample_stages = c(10, 100, 10000),
+  p_thresholds = c(0.1, 0.001),
+  col_beta_exposure = "beta.exposure",
+  col_beta_outcome = "beta.outcome",
+  col_pval_exposure = "pval.exposure"
+)
+
+print(ECT_res)
+```
+
+
+
+
 
 
 
