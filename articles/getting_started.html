@@ -220,6 +220,16 @@ subdirectories are deleted after the function completes.</td>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pruned_snps</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt;          SNP   CHR      POS    REF    ALT       BETA        SE     AF</span></span>
+<span><span class="co">#&gt;       &lt;char&gt; &lt;int&gt;    &lt;int&gt; &lt;char&gt; &lt;char&gt;      &lt;num&gt;     &lt;num&gt;  &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: rs2143178    22 39660829      T      C -0.1766840 0.0137017 0.1658</span></span>
+<span><span class="co">#&gt; 2: rs1003342    22 30570022      A      G -0.0801818 0.0101765 0.5459</span></span>
+<span><span class="co">#&gt; 3: rs2283789    22 21944478      T      G  0.0887993 0.0122872 0.1997</span></span>
+<span><span class="co">#&gt;               P</span></span>
+<span><span class="co">#&gt;           &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: 4.799544e-38</span></span>
+<span><span class="co">#&gt; 2: 3.296856e-15</span></span>
+<span><span class="co">#&gt; 3: 4.938556e-13</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -282,7 +292,7 @@ placeholder row indicating that the test was not performed.</p>
 <div class="section level3">
 <h3 id="usage-1">Usage<a class="anchor" aria-label="anchor" href="#usage-1"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ECT.html">ECT</a></span><span class="op">(</span></span>
 <span>  <span class="va">assoc_pair</span>,</span>
 <span>  <span class="va">factor_name</span>,</span>
@@ -375,7 +385,7 @@ the package.</p>
 <p>This dataset contains SNP-level association summary statistics that
 have already been <strong>harmonized with the GWAS</strong> (i.e.,
 aligned alleles, matched SNPs, and retained relevant columns).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"example_assoc_output.RDS"</span>,</span>
@@ -448,7 +458,7 @@ aligned alleles, matched SNPs, and retained relevant columns).</p>
 <span><span class="co">#&gt; 6        TRUE    0.4592454</span></span></code></pre></div>
 <p>To keep the example computationally light, we reduce the number of
 resampling iterations compared to the default settings.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">ECT_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ECT.html">ECT</a></span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>

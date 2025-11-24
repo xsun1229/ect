@@ -112,6 +112,17 @@ pruned_snps <- prune_snps(
 print(pruned_snps)
 ```
 
+    #>          SNP   CHR      POS    REF    ALT       BETA        SE     AF
+    #>       <char> <int>    <int> <char> <char>      <num>     <num>  <num>
+    #> 1: rs2143178    22 39660829      T      C -0.1766840 0.0137017 0.1658
+    #> 2: rs1003342    22 30570022      A      G -0.0801818 0.0101765 0.5459
+    #> 3: rs2283789    22 21944478      T      G  0.0887993 0.0122872 0.1997
+    #>               P
+    #>           <num>
+    #> 1: 4.799544e-38
+    #> 2: 3.296856e-15
+    #> 3: 4.938556e-13
+
 ## Effect Consistency Test
 
 The [`ECT()`](../reference/ECT.md) function performs an **adaptive
